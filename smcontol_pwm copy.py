@@ -8,30 +8,20 @@ lcd.write_string("initializing... ")
 sleep(2)
 
 
-def pmw_motor():
-    pulse_wight = int(input("Set Wave Length"))
-    pulse_frequency = int(input("Set a Frequency: "))
+pulse_wight = int(input("Set Wave Length"))
+pulse_frequency = int(input("Set a Frequency: "))
 
-    engine_set()
-    rotation_set()
-    duration = float(input("Set Time Duration: "))
-    confirm_ignition(pulse_frequency, pulse_wight)
-    pmw = GPIO.PWM(7, pulse_frequency)
-    pmw.start(pulse_wight)
-    sleep(duration)
-    GPIO.output(7, 0)
-    pmw.stop()
-    lcd.clear()
-    lcd.write_string("ignition complete...")
-    print("ignition complete...")
-    pmw_motor()
+    
+confirm_ignition(pulse_frequency, pulse_wight)
+    
+    
 
 
 def engine_set():
     GPIO.setup(7, GPIO.OUT)
     GPIO.setup(11, GPIO.OUT)
     GPIO.setup(13, GPIO.OUT)
-    engine_set()
+    
 
 
 def rotation_set():
@@ -45,15 +35,26 @@ def rotation_set():
         GPIO.output(7, 1)
         GPIO.output(11, 0)
         GPIO.output(13, 1)
-    rotation_set()
+   
 
 
 def confirm_ignition(pulse_frequency, pulse_wight):
 
-    lcd.write_string("Engine Set For " + str(pulse_wight), str(pulse_frequency))
+    lcd.write_string("Engine Set")
 
     permission = str(input("Please Confirm Ignition"))
     if permission == "Confirm":
+        engine_set()
+        rotation_set()
+        duration = float(input("Set Time Duration: "))
+        pmw = GPIO.PWM(7, pulse_frequency)
+        pmw.start(pulse_wight)
+        sleep(duration)
+        GPIO.output(7, 0)
+        pmw.stop()
+        lcd.clear()
+        lcd.write_string("ignition complete...")
+        print("ignition complete...")
         lcd.clear()
     else:
         print("ignition terminated")
