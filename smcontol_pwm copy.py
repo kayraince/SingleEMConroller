@@ -6,27 +6,31 @@ GPIO.setwarnings(False)
 lcd = CharLCD(pin_rs=38, pin_e=40, pins_data=[37, 35, 33, 31], numbering_mode=GPIO.BOARD, cols=16, rows=2, dotsize=8, charmap='A02', autolinebreaks=True)
 lcd.write_string("initializing... ")
 sleep(2)
+pulse_lambda = int(input("Pulse Wight: "))
+pulse_frequency = int(input("Pulse Frequency: "))
+pulse_duration = int(input("Pulse Duration: "))
+pulse_direction = str(input("Pulse Direction: "))
 
 
-pulse_wight = int(input("Set Wave Length"))
-pulse_frequency = int(input("Set a Frequency: "))
-
+def ignition(pulse_frequency, pulse_lambda, pulse_direction, pulse_duration):
+    engine_set()
+    rotation_set(pulse_direction)
+    pmw = GPIO.PWM(7, pulse_frequency)
+    pmw.start(pulse_lambda)
+    sleep(pulse_duration)
+    pmw.stop()
+    kill()
     
-confirm_ignition(pulse_frequency, pulse_wight)
     
     
-
-
 def engine_set():
     GPIO.setup(7, GPIO.OUT)
     GPIO.setup(11, GPIO.OUT)
     GPIO.setup(13, GPIO.OUT)
+
+
+def rotation_set(direction):
     
-
-
-def rotation_set():
-
-    direction = str(input("Choose a Direction: "))
     if direction == "clockwise":
         GPIO.output(7, 1)
         GPIO.output(11, 1)
@@ -35,27 +39,15 @@ def rotation_set():
         GPIO.output(7, 1)
         GPIO.output(11, 0)
         GPIO.output(13, 1)
-   
-
-
-def confirm_ignition(pulse_frequency, pulse_wight):
-
-    lcd.write_string("Engine Set")
-
-    permission = str(input("Please Confirm Ignition"))
-    if permission == "Confirm":
-        engine_set()
-        rotation_set()
-        duration = float(input("Set Time Duration: "))
-        pmw = GPIO.PWM(7, pulse_frequency)
-        pmw.start(pulse_wight)
-        sleep(duration)
-        GPIO.output(7, 0)
-        pmw.stop()
-        lcd.clear()
-        lcd.write_string("ignition complete...")
-        print("ignition complete...")
-        lcd.clear()
-    else:
-        print("ignition terminated")
-        exit(1)
+        
+        
+def kill():
+    GPIO.output(7, 0)
+    
+    
+confirm_ignition = str(input("confirm ignition: "))
+if confirm_ignition == "confirm":
+    ignition(pulse_frequency, pulse_lambda, pulse_direction, pulse_duration)
+else:
+    exit(1)
+    
