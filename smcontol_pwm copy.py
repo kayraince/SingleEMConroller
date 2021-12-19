@@ -10,6 +10,13 @@ pulse_lambda = int(input("Pulse Wight: "))
 pulse_frequency = int(input("Pulse Frequency: "))
 pulse_duration = int(input("Pulse Duration: "))
 pulse_direction = str(input("Pulse Direction: "))
+confirm_ignition = str(input("confirm ignition: "))
+if confirm_ignition == "confirm":
+    ignition(pulse_frequency, pulse_lambda, pulse_direction, pulse_duration)
+else:
+    lcd.write_string("terminated")
+    print("terminated")
+    exit(1)
 
 
 def ignition(pulse_frequency, pulse_lambda, pulse_direction, pulse_duration):
@@ -45,9 +52,5 @@ def kill():
     GPIO.output(7, 0)
     
     
-confirm_ignition = str(input("confirm ignition: "))
-if confirm_ignition == "confirm":
-    ignition(pulse_frequency, pulse_lambda, pulse_direction, pulse_duration)
-else:
-    exit(1)
+
     
