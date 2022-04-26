@@ -7,7 +7,7 @@ lcd = CharLCD(pin_rs=38, pin_e=40, pins_data=[37, 35, 33, 31], numbering_mode=GP
 lcd.write_string("initializing... ")
 sleep(2)
 lcd.clear()
-pulse_lambda = int(input("Pulse Wight: "))
+pulse_lambda = int(input("Pulse Width: "))
 pulse_frequency = int(input("Pulse Frequency: "))
 pulse_duration = int(input("Pulse Duration: "))
 pulse_direction = str(input("Pulse Direction: "))
